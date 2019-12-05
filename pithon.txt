@@ -1,0 +1,38 @@
+clc()
+close(mstring('all'))
+I = imread(mstring('ani.jpg'))
+#face detection
+FDetect = vision.CascadeObjectDetector#upload face detection libraries
+figure()
+#show image
+imshow(I)
+#hold image for changes
+hold(mstring('on'))
+#face detection
+x = step(FDetect, I)
+#color detected face in image by red
+for i in mslice[1:size(x, 1)]:
+    rectangle(mstring('Position'), x(1, mslice[:]), mstring('LineWidth'), 5, mstring('LineStyle'), mstring('-'), mstring('EdgeColor'), mstring('r'))
+end
+
+#crop image
+figure()
+j = imcrop(I, x)
+imshow(j)
+
+#eyes detection
+EyeDetect = vision.CascadeObjectDetector(mstring('EyePairBig'))#eye detection libraries
+#eyes detection
+BBE = step(EyeDetect, j)
+#croping eyes
+figure()
+[x, y, z] = size(BBE)
+k = imcrop(j, BBE(x, mslice[:], mslice[:]))
+imshow(k)
+
+k = rgb2gray(k)
+img = edge(k, mstring('canny'))
+figure()
+imshow(img)
+title(mstring('canny'))
+
